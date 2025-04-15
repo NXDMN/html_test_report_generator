@@ -191,34 +191,6 @@ void groupAllTests(
   Map<int, TestGroup> testGroups,
   Map<int, TestResult> tests,
 ) {
-  for (var testGroup in testGroups.values.toList()) {
-    if (testGroup.parentID != null) {
-      final parent = testGroups[testGroup.parentID]!;
-      if (parent.name != null && parent.name!.isNotEmpty) {
-        if (parentGroupToGroupsMap.containsKey(testGroup.parentID)) {
-          parentGroupToGroupsMap[testGroup.parentID]?.add(testGroup);
-        } else {
-          parentGroupToGroupsMap[testGroup.parentID!] = [testGroup];
-        }
-      }
-    }
-  }
-
-  for (var testGroup in testGroups.values.toList()) {
-    if (testGroup.suiteID != null) {
-      if ((testGroup.parentID == null ||
-              !parentGroupToGroupsMap.containsKey(testGroup.parentID)) &&
-          testGroup.name != null &&
-          testGroup.name!.isNotEmpty) {
-        if (suiteToGroupsMap.containsKey(testGroup.suiteID)) {
-          suiteToGroupsMap[testGroup.suiteID]?.add(testGroup);
-        } else {
-          suiteToGroupsMap[testGroup.suiteID!] = [testGroup];
-        }
-      }
-    }
-  }
-
   for (var test in tests.values.toList()) {
     if (test.hidden == false) {
       if (test.suiteID != null &&
@@ -242,12 +214,44 @@ void groupAllTests(
         for (var id in ids) {
           final group = testGroups[id]!;
           if (group.name != null && group.name!.isNotEmpty) {
+            test.name = test.name?.replaceAll(group.name!, "").trim();
+
             if (groupToTestsMap.containsKey(id)) {
               groupToTestsMap[id]?.add(test);
             } else {
               groupToTestsMap[id] = [test];
             }
           }
+        }
+      }
+    }
+  }
+
+  for (var testGroup in testGroups.values.toList()) {
+    if (testGroup.parentID != null) {
+      final parent = testGroups[testGroup.parentID]!;
+      if (parent.name != null && parent.name!.isNotEmpty) {
+        testGroup.name = testGroup.name?.replaceAll(parent.name!, "").trim();
+
+        if (parentGroupToGroupsMap.containsKey(testGroup.parentID)) {
+          parentGroupToGroupsMap[testGroup.parentID]?.add(testGroup);
+        } else {
+          parentGroupToGroupsMap[testGroup.parentID!] = [testGroup];
+        }
+      }
+    }
+  }
+
+  for (var testGroup in testGroups.values.toList()) {
+    if (testGroup.suiteID != null) {
+      if ((testGroup.parentID == null ||
+              !parentGroupToGroupsMap.containsKey(testGroup.parentID)) &&
+          testGroup.name != null &&
+          testGroup.name!.isNotEmpty) {
+        if (suiteToGroupsMap.containsKey(testGroup.suiteID)) {
+          suiteToGroupsMap[testGroup.suiteID]?.add(testGroup);
+        } else {
+          suiteToGroupsMap[testGroup.suiteID!] = [testGroup];
         }
       }
     }
