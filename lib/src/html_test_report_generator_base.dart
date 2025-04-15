@@ -48,36 +48,25 @@ void run(String filePath, String outputFilePath) async {
     if (testGroups != null) {
       htmlContent += testGroups.map((testGroup) {
         if (parentGroupToGroupsMap.containsKey(testGroup.id)) {
-          String groupContent =
-              '''<div class="testGroup ${testGroup.state?.name}"><span>Group: <b>${testGroup.name}</b> (${testGroup.testCount} test${(testGroup.testCount ?? 0) > 1 ? "s" : ""})</span><span style="color:${testGroup.state?.color};">${testGroup.state?.text}</span></div>''';
+          String groupContent = displayTestGroup(testGroup);
           groupContent += '''<div class="inner">''';
           if (groupToTestsMap.containsKey(testGroup.id)) {
             List<TestResult> childTests = groupToTestsMap[testGroup.id]!;
-            groupContent += childTests
-                .map((test) =>
-                    '''<div class="testResult ${test.state?.name}"><span>${test.name}</span><span style="color:${test.state?.color};">${test.state?.text}</span></div>''')
-                .join("\n");
+            groupContent +=
+                childTests.map((test) => displayTestResult(test)).join("\n");
           }
           List<TestGroup> childGroups = parentGroupToGroupsMap[testGroup.id]!;
           for (var childGroup in childGroups) {
             if (groupToTestsMap.containsKey(childGroup.id)) {
               List<TestResult> childTests = groupToTestsMap[childGroup.id]!;
               groupContent += '''
-<div class="testGroup ${testGroup.state?.name}">
-  <span>Group: ${childGroup.name} (${childGroup.testCount} test${(testGroup.testCount ?? 0) > 1 ? "s" : ""})</span>
-  <span style="color:${childGroup.state?.color};">${childGroup.state?.text}</span>
-</div>
+${displayTestGroup(childGroup)}
 <div class="inner">
-  ${childTests.map((test) => '''<div class="testResult ${test.state?.name}"><span>${test.name}</span><span style="color:${test.state?.color};">${test.state?.text}</span></div>''').join("\n")}
+  ${childTests.map((test) => displayTestResult(test)).join("\n")}
 </div>
         ''';
             } else {
-              groupContent += '''
-<div class="testGroup ${testGroup.state?.name}">
-  <span>Group: ${childGroup.name} (${childGroup.testCount} test${(testGroup.testCount ?? 0) > 1 ? "s" : ""})</span>
-  <span style="color:${childGroup.state?.color};">${childGroup.state?.text}</span>
-</div>
-        ''';
+              groupContent += displayTestGroup(childGroup);
             }
           }
           groupContent += "</div>";
@@ -86,30 +75,21 @@ void run(String filePath, String outputFilePath) async {
           if (groupToTestsMap.containsKey(testGroup.id)) {
             List<TestResult> children = groupToTestsMap[testGroup.id]!;
             return '''
-<div class="testGroup ${testGroup.state?.name}">
-  <span>Group: <b>${testGroup.name}</b> (${testGroup.testCount} test${(testGroup.testCount ?? 0) > 1 ? "s" : ""})</span>
-  <span style="color:${testGroup.state?.color};">${testGroup.state?.text}</span>
-</div>
+${displayTestGroup(testGroup)}
 <div class="inner">
-  ${children.map((test) => '''<div class="testResult ${test.state?.name}"><span>${test.name}</span><span style="color:${test.state?.color};">${test.state?.text}</span></div>''').join("\n")}
+  ${children.map((test) => displayTestResult(test)).join("\n")}
 </div>
         ''';
           }
-          return '''
-<div class="testGroup ${testGroup.state?.name}">
-  <span>Group: <b>${testGroup.name}</b> (${testGroup.testCount} test${(testGroup.testCount ?? 0) > 1 ? "s" : ""})</span>
-  <span style="color:${testGroup.state?.color};">${testGroup.state?.text}</span>
-</div>''';
+          return displayTestGroup(testGroup);
         }
       }).join("\n");
     }
 
     final testResults = suiteToTestsMap[suiteID];
     if (testResults != null) {
-      htmlContent += testResults
-          .map((test) =>
-              '''<div class="testResult ${test.state?.name}"><span>${test.name}</span><span style="color:${test.state?.color};">${test.state?.text}</span></div>''')
-          .join("\n");
+      htmlContent +=
+          testResults.map((test) => displayTestResult(test)).join("\n");
     }
 
     htmlContent += "</div>";
@@ -166,6 +146,11 @@ void run(String filePath, String outputFilePath) async {
       div.failure {
         border-color: red;
       }
+      .duration {
+        display: inline-block;
+        width: 4em;
+        text-align: right;
+      }
       .inner {
         margin-left: 20px;
       }
@@ -181,7 +166,7 @@ void run(String filePath, String outputFilePath) async {
     </div>
     <div class="content">$htmlContent</div>
   </body>
-<html>
+</html>
   ''');
   await file.close();
 }
@@ -216,6 +201,8 @@ void groupAllTests(
           if (group.name != null && group.name!.isNotEmpty) {
             test.name = test.name?.replaceAll(group.name!, "").trim();
 
+            group.duration += (test.endTime! - test.startTime!);
+
             if (groupToTestsMap.containsKey(id)) {
               groupToTestsMap[id]?.add(test);
             } else {
@@ -232,6 +219,8 @@ void groupAllTests(
       final parent = testGroups[testGroup.parentID]!;
       if (parent.name != null && parent.name!.isNotEmpty) {
         testGroup.name = testGroup.name?.replaceAll(parent.name!, "").trim();
+
+        parent.duration += testGroup.duration;
 
         if (parentGroupToGroupsMap.containsKey(testGroup.parentID)) {
           parentGroupToGroupsMap[testGroup.parentID]?.add(testGroup);
@@ -256,4 +245,28 @@ void groupAllTests(
       }
     }
   }
+}
+
+String displayTestGroup(TestGroup group) {
+  return '''
+<div class="testGroup ${group.state?.name}">
+  <span>Group: <b>${group.name}</b> (${group.testCount} test${(group.testCount ?? 0) > 1 ? "s" : ""})</span>
+  <div>
+    <span style="color:${group.state?.color};">${group.state?.text}</span>
+    <span class="duration">${group.durationText}</span>
+  </div>
+</div>
+''';
+}
+
+String displayTestResult(TestResult test) {
+  return '''
+<div class="testResult ${test.state?.name}">
+  <span>${test.name}</span>
+  <div>
+    <span style="color:${test.state?.color};">${test.state?.text}</span>
+    <span class="duration">${test.durationText}</span>
+  </div>
+</div>
+''';
 }

@@ -12,6 +12,15 @@ class TestGroup {
   String? skipReason;
   int? testCount;
   String? url;
+  int duration = 0;
+
+  String get durationText {
+    if (duration <= 0) return "";
+
+    if (duration > 99) return "${(duration / 1000.0).toStringAsFixed(2)} s";
+
+    return "$duration ms";
+  }
 }
 
 class TestResult {
@@ -23,6 +32,17 @@ class TestResult {
   String? skipReason;
   String? url;
   bool? hidden;
+  int? startTime;
+  int? endTime;
+
+  String get durationText {
+    final duration = endTime! - startTime!;
+    if (duration <= 0) return "";
+
+    if (duration > 99) return "${(duration / 1000.0).toStringAsFixed(2)} s";
+
+    return "$duration ms";
+  }
 }
 
 enum State {

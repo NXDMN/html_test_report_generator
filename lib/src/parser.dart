@@ -76,6 +76,7 @@ class Parser {
       model.skipReason = line['test']['metadata']['skipReason'];
     }
     model.url = line['test']['url'];
+    model.startTime = line['time'];
   }
 
   void _parseTestDone(Map<String, dynamic> line) {
@@ -96,6 +97,7 @@ class Parser {
         }
       }
       model.hidden = line['hidden'];
+      model.endTime = line['time'];
     }
   }
 }
