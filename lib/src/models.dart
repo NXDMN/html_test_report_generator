@@ -30,6 +30,8 @@ class TestResult {
   List<int>? groupIDs;
   State? state;
   String? skipReason;
+  String? errorMessage;
+  String? stackTrace;
   String? url;
   bool? hidden;
   int? startTime;

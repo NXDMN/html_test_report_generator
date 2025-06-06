@@ -33,6 +33,9 @@ class Parser {
       case 'testDone':
         _parseTestDone(line);
         break;
+      case 'error':
+        _parseTestError(line);
+        break;
       default:
         break;
     }
@@ -98,6 +101,16 @@ class Parser {
       }
       model.hidden = line['hidden'];
       model.endTime = line['time'];
+    }
+  }
+
+  void _parseTestError(Map<String, dynamic> line) {
+    int id = line['testID'];
+
+    final model = tests[id];
+    if (model != null) {
+      model.errorMessage = line['error'];
+      model.stackTrace = line['stackTrace'];
     }
   }
 }

@@ -136,6 +136,7 @@ ${displayTestGroup(testGroup)}
         border-left: 4px solid;
         display: flex;
         justify-content: space-between;
+        align-items: center;
       }
       div.success {
         border-color: green;
@@ -251,7 +252,7 @@ String displayTestGroup(TestGroup group) {
   return '''
 <div class="testGroup ${group.state?.name}">
   <span>Group: <b>${group.name}</b> (${group.testCount} test${(group.testCount ?? 0) > 1 ? "s" : ""})</span>
-  <div>
+  <div style="min-width: 10%">
     <span style="color:${group.state?.color};">${group.state?.text}</span>
     <span class="duration">${group.durationText}</span>
   </div>
@@ -260,10 +261,21 @@ String displayTestGroup(TestGroup group) {
 }
 
 String displayTestResult(TestResult test) {
+  String errorDisplay = "";
+  if (test.errorMessage != null) {
+    errorDisplay = '''
+<span style="font-weight: bold">Error:</span>
+<span>${test.errorMessage}</span>
+''';
+  }
+
   return '''
 <div class="testResult ${test.state?.name}">
-  <span>${test.name}</span>
-  <div>
+  <div style="display: flex; flex-direction: column">
+    <span>${test.name}</span>
+    $errorDisplay
+  </div>
+  <div style="min-width: 10%">
     <span style="color:${test.state?.color};">${test.state?.text}</span>
     <span class="duration">${test.durationText}</span>
   </div>
