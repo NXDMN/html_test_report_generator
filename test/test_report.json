@@ -1,0 +1,19 @@
+{"protocolVersion":"0.1.1","runnerVersion":"1.25.15","pid":24644,"type":"start","time":0}
+{"suite":{"id":0,"platform":"vm","path":"C:/AnacleProjects/html_test_report_generator/test/html_test_report_generator_test.dart"},"type":"suite","time":0}
+{"test":{"id":1,"name":"loading C:/AnacleProjects/html_test_report_generator/test/html_test_report_generator_test.dart","suiteID":0,"groupIDs":[],"metadata":{"skip":false,"skipReason":null},"line":null,"column":null,"url":null},"type":"testStart","time":1}
+{"count":1,"time":4,"type":"allSuites"}
+{"testID":1,"result":"success","skipped":false,"hidden":true,"type":"testDone","time":681}
+{"group":{"id":2,"suiteID":0,"parentID":null,"name":"","metadata":{"skip":false,"skipReason":null},"testCount":4,"line":null,"column":null,"url":null},"type":"group","time":684}
+{"group":{"id":3,"suiteID":0,"parentID":2,"name":"html_test_report_generator_base.dart","metadata":{"skip":false,"skipReason":null},"testCount":4,"line":77,"column":3,"url":"file:///C:/AnacleProjects/html_test_report_generator/test/html_test_report_generator_test.dart"},"type":"group","time":685}
+{"test":{"id":4,"name":"html_test_report_generator_base.dart run","suiteID":0,"groupIDs":[2,3],"metadata":{"skip":false,"skipReason":null},"line":88,"column":5,"url":"file:///C:/AnacleProjects/html_test_report_generator/test/html_test_report_generator_test.dart"},"type":"testStart","time":685}
+{"testID":4,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":724}
+{"test":{"id":5,"name":"html_test_report_generator_base.dart groupAllTests","suiteID":0,"groupIDs":[2,3],"metadata":{"skip":false,"skipReason":null},"line":94,"column":5,"url":"file:///C:/AnacleProjects/html_test_report_generator/test/html_test_report_generator_test.dart"},"type":"testStart","time":725}
+{"testID":5,"error":"Expected: empty\n  Actual: {\n            2: [Instance of 'TestResult'],\n            3: [Instance of 'TestResult', Instance of 'TestResult'],\n            1: [Instance of 'TestResult']\n          }\n","stackTrace":"package:matcher                                 expect\ntest\\html_test_report_generator_test.dart 99:7  main.<fn>.<fn>\n","isFailure":true,"type":"error","time":746}
+{"testID":5,"result":"failure","skipped":false,"hidden":false,"type":"testDone","time":747}
+{"test":{"id":6,"name":"html_test_report_generator_base.dart displayTestGroup","suiteID":0,"groupIDs":[2,3],"metadata":{"skip":false,"skipReason":null},"line":102,"column":5,"url":"file:///C:/AnacleProjects/html_test_report_generator/test/html_test_report_generator_test.dart"},"type":"testStart","time":748}
+{"testID":6,"messageType":"print","message":"<div class=\"testGroup success\">\n  <span>Group: <b>TestGroup 1</b> (1 test)</span>\n  <div style=\"min-width: 120px\">\n    <span style=\"color:green;\">Success</span>\n    <span class=\"duration\"></span>\n  </div>\n</div>\n","type":"print","time":753}
+{"testID":6,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":754}
+{"test":{"id":7,"name":"html_test_report_generator_base.dart displayTestResult","suiteID":0,"groupIDs":[2,3],"metadata":{"skip":false,"skipReason":null},"line":108,"column":5,"url":"file:///C:/AnacleProjects/html_test_report_generator/test/html_test_report_generator_test.dart"},"type":"testStart","time":755}
+{"testID":7,"messageType":"print","message":"<div class=\"testResult success\">\n  <div style=\"display: flex; flex-direction: column\">\n    <span>null</span>\n    <span style=\"font-weight: bold\">Error:</span>\n<span>Error</span>\n\n    <span style=\"font-weight: bold\">Output:</span>\n<pre>Print</pre>\n\n  </div>\n  <div style=\"min-width: 120px\">\n    <span style=\"color:green;\">Success</span>\n    <span class=\"duration\"></span>\n  </div>\n</div>\n","type":"print","time":761}
+{"testID":7,"result":"success","skipped":false,"hidden":false,"type":"testDone","time":762}
+{"success":false,"type":"done","time":781}
