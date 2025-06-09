@@ -35,6 +35,8 @@ class Parser {
         break;
       case 'error':
         _parseTestError(line);
+      case 'print':
+        _parseTestPrint(line);
         break;
       default:
         break;
@@ -111,6 +113,16 @@ class Parser {
     if (model != null) {
       model.errorMessage = line['error'];
       model.stackTrace = line['stackTrace'];
+    }
+  }
+
+  void _parseTestPrint(Map<String, dynamic> line) {
+    int id = line['testID'];
+
+    final model = tests[id];
+    if (model != null) {
+      model.printMessages ??= [];
+      model.printMessages?.add(line['message']);
     }
   }
 }

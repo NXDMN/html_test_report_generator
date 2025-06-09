@@ -109,6 +109,9 @@ ${displayTestGroup(testGroup)}
       html, body {
         height: 100%;
       }
+      pre {
+        white-space: pre-wrap;
+      }
       .header {
         background-color: lightsteelblue;
         padding: 20px 40px;
@@ -252,7 +255,7 @@ String displayTestGroup(TestGroup group) {
   return '''
 <div class="testGroup ${group.state?.name}">
   <span>Group: <b>${group.name}</b> (${group.testCount} test${(group.testCount ?? 0) > 1 ? "s" : ""})</span>
-  <div style="min-width: 10%">
+  <div style="min-width: 120px">
     <span style="color:${group.state?.color};">${group.state?.text}</span>
     <span class="duration">${group.durationText}</span>
   </div>
@@ -261,6 +264,18 @@ String displayTestGroup(TestGroup group) {
 }
 
 String displayTestResult(TestResult test) {
+  String printDisplay = "";
+  if (test.printMessages != null) {
+    printDisplay = '''
+<span style="font-weight: bold">Output:</span>
+${test.printMessages?.map((message) {
+      var result = message.replaceAll('<', '&lt;');
+      result = result.replaceAll('>', '&gt;');
+      return "<pre>$result</pre>";
+    }).join("\n")}
+''';
+  }
+
   String errorDisplay = "";
   if (test.errorMessage != null) {
     errorDisplay = '''
@@ -274,8 +289,9 @@ String displayTestResult(TestResult test) {
   <div style="display: flex; flex-direction: column">
     <span>${test.name}</span>
     $errorDisplay
+    $printDisplay
   </div>
-  <div style="min-width: 10%">
+  <div style="min-width: 120px">
     <span style="color:${test.state?.color};">${test.state?.text}</span>
     <span class="duration">${test.durationText}</span>
   </div>

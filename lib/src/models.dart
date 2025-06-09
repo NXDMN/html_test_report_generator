@@ -32,6 +32,7 @@ class TestResult {
   String? skipReason;
   String? errorMessage;
   String? stackTrace;
+  List<String>? printMessages;
   String? url;
   bool? hidden;
   int? startTime;
