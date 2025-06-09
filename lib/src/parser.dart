@@ -4,6 +4,14 @@ import 'dart:io';
 import 'package:html_test_report_generator/src/models.dart';
 
 class Parser {
+  final bool parseError;
+  final bool parsePrint;
+
+  Parser({
+    this.parseError = false,
+    this.parsePrint = false,
+  });
+
   Map<int, TestSuite> testSuites = {};
   Map<int, TestGroup> testGroups = {};
   Map<int, TestResult> tests = {};
@@ -34,9 +42,10 @@ class Parser {
         _parseTestDone(line);
         break;
       case 'error':
-        _parseTestError(line);
+        if (parseError) _parseTestError(line);
+        break;
       case 'print':
-        _parseTestPrint(line);
+        if (parsePrint) _parseTestPrint(line);
         break;
       default:
         break;

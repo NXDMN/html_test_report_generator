@@ -8,8 +8,15 @@ Map<int, List<TestResult>> suiteToTestsMap = {};
 Map<int, List<TestGroup>> parentGroupToGroupsMap = {};
 Map<int, List<TestResult>> groupToTestsMap = {};
 
-void run(String filePath, String outputFilePath) async {
-  final parser = Parser()..parseFile(filePath);
+void run(
+  String filePath,
+  String outputFilePath, {
+  bool hasErrorMessage = false,
+  bool hasPrintMessage = false,
+}) async {
+  final parser =
+      Parser(parseError: hasErrorMessage, parsePrint: hasPrintMessage)
+        ..parseFile(filePath);
 
   groupAllTests(parser.testSuites, parser.testGroups, parser.tests);
 

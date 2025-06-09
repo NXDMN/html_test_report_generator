@@ -10,6 +10,8 @@ void main(List<String> args) {
 Global options:
 -h, --help        Print this usage information.
 -o, --output      Specify the output html report file path.
+-e, --error       Include exception error message.
+-p, --print       Include system output message.
 ''';
 
   if (args.isEmpty || args.contains("-h") || args.contains("--help")) {
@@ -29,10 +31,20 @@ Global options:
   }
 
   String? outputFilePath;
+  bool hasErrorMessage = false;
+  bool hasPrintMessage = false;
   for (var i = 1; i < args.length; i++) {
     if (args[i] == "-o" || args[i] == "--output") {
       outputFilePath = args.elementAtOrNull(++i);
       if (outputFilePath == null) break;
+    }
+
+    if (args[i] == "-e" || args[i] == "--error") {
+      hasErrorMessage = true;
+    }
+
+    if (args[i] == "-p" || args[i] == "--print") {
+      hasPrintMessage = true;
     }
   }
 
@@ -48,5 +60,10 @@ Global options:
     outputFilePath += ".html";
   }
 
-  html_test_report_generator.run(filePath, outputFilePath);
+  html_test_report_generator.run(
+    filePath,
+    outputFilePath,
+    hasErrorMessage: hasErrorMessage,
+    hasPrintMessage: hasPrintMessage,
+  );
 }
